@@ -1,5 +1,7 @@
-Name:		keepalived
+# TODO: why it uses 2.6.x kernel header directly instead of llh?
 Summary:	HA monitor built upon LVS, VRRP and services poller
+Summary(pl):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzêdzie do sprawdzania us³ug
+Name:		keepalived
 Version:	1.1.11
 Release:	0.8
 License:	GPL v2
@@ -10,20 +12,37 @@ Source0:	http://www.keepalived.org/software/%{name}-%{version}.tar.gz
 URL:		http://www.keepalived.org/
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	popt-devel
+Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 The main goal of the keepalived project is to add a strong & robust
 keepalive facility to the Linux Virtual Server project. This project
 is written in C with multilayer TCP/IP stack checks. Keepalived
-implements a framework based on three family checks : Layer3, Layer4 &
+implements a framework based on three family checks: Layer3, Layer4 &
 Layer5. This framework gives the daemon the ability of checking a LVS
 server pool states. When one of the server of the LVS server pool is
-down, keepalived informs the linux kernel via a setsockopt call to
-remove this server entrie from the LVS topology. In addition
+down, keepalived informs the Linux kernel via a setsockopt call to
+remove this server entry from the LVS topology. In addition
 keepalived implements a VRRPv2 stack to handle director failover. So
 in short keepalived is a userspace daemon for LVS cluster nodes
 healthchecks and LVS directors failover.
+
+%description -l pl
+G³ównym celem projektu keepalived jest dodanie potê¿nego udogodnienia
+keepalive do projektu Linux Virtual Server. Ten projekt jest napisany
+w C z wielowarstwowym sprawdzaniem stosu TCP/IP. keepalived
+implementuje szkielet oparty na sprawdzaniu trzech rodzin: warstwy 3,
+warstwy 4 i warstwy 5. Ten szkielet daje demonowi mo¿liwo¶æ
+sprawdzania stanów puli serwerów LVS. Kiedy jeden serwer z puli
+serwerów LVS przestaje dzia³aæ, keepalived informuje o tym j±dro
+Linuksa poprzez wywo³anie setsockopt w celu usuniêcia wpisu o serwerze
+z topologii LVS. Poza tym keepalived implementuje stos VRRPv2 do
+obs³ugi przejmowania zadañ (failover) samego urz±dzenia zarz±dzaj±cego
+(director). Czyli w skrócie keepalived to dzia³aj±cy w przestrzeni
+u¿ytkownika demon do sprawdzania stanu wêz³ów klastra LVS oraz
+przejmowania zadañ urz±dzenia zarz±dzaj±cego.
 
 %prep
 %setup -q
@@ -56,7 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 /sbin/chkconfig --add keepalived
 
 %preun
-/sbin/chkconfig --del keepalived
+if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del keepalived
+fi
 
 %files
 %defattr(644,root,root,755)
