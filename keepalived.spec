@@ -1,4 +1,9 @@
+#
 # TODO: why it uses 2.6.x kernel header directly instead of llh?
+#       and more - it looks for /usr/src/linux/net/core/link_watch.c 
+#	(kernel-source) for LVS features - check build/kernel 
+#	dependency.
+#
 Summary:	HA monitor built upon LVS, VRRP and services poller
 Summary(pl):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzêdzie do sprawdzania us³ug
 Name:		keepalived
