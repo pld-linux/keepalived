@@ -8,16 +8,19 @@
 Summary:	HA monitor built upon LVS, VRRP and services poller
 Summary(pl):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzêdzie do sprawdzania us³ug
 Name:		keepalived
-Version:	1.1.12
+Version:	1.1.13
 Release:	0.1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://www.keepalived.org/software/%{name}-%{version}.tar.gz
-# Source0-md5:	622e656a1e79566df04f2922afef524c
-#Source1:	%{name}.init
+# Source0-md5:	578bdb8e3ff4cca50fc877893bad658c
+Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 URL:		http://www.keepalived.org/
+BuildRequires:	kernel-source >= 2.6.0
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	popt-devel
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -63,25 +66,28 @@ sed -i 's/_KRNL_2_2_/_KRNL_2_6_/' configure
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/keepalived,/etc/rc.d/init.d}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/keepalived
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}}
 
 install keepalived/etc/keepalived/keepalived.conf $RPM_BUILD_ROOT%{_sysconfdir}/keepalived
-install keepalived/etc/init.d/keepalived.init $RPM_BUILD_ROOT/etc/rc.d/init.d/keepalived
 install bin/genhash $RPM_BUILD_ROOT%{_bindir}
 install bin/keepalived $RPM_BUILD_ROOT%{_sbindir}
 install doc/man/man1/* $RPM_BUILD_ROOT%{_mandir}/man1
 install doc/man/man5/* $RPM_BUILD_ROOT%{_mandir}/man5
 install doc/man/man8/* $RPM_BUILD_ROOT%{_mandir}/man8
+install -D %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/keepalived
+install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/keepalived
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add keepalived
+%service keepalived restart
 
 %preun
 if [ "$1" = "0" ]; then
+	%service keepalived stop
 	/sbin/chkconfig --del keepalived
 fi
 
@@ -92,5 +98,7 @@ fi
 %attr(755,root,root) %{_bindir}/genhash
 %attr(755,root,root) %{_sbindir}/keepalived
 %attr(754,root,root) /etc/rc.d/init.d/keepalived
-%{_sysconfdir}/keepalived
+%dir %{_sysconfdir}/keepalived
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keepalived/keepalived.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/keepalived
 %{_mandir}/man?/*
