@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# keepalived	HA monitor
+#
+# chkconfig:	345 21 79
+# description:	Start and stop Keepalived
+# processname:	keepalived
+# pidfile:	/var/run/keepalived.pid
+# config:	/etc/keepalived/keepalived.conf
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Get service config
+[ -f /etc/sysconfig/keepalived ] && . /etc/sysconfig/keepalived
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down keepalived
+	exit 1
+	fi
+else
+	exit 0
+fi
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/keepalived ]; then
+		msg_starting Keepalived
+		daemon keepalived $KEEPALIVED_OPTS
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/keepalived
+	else
+		msg_already_running Keepalived
+	fi
+	;;
+  stop)
+	# Stop daemons.
+	if [ -f /var/lock/subsys/keepalived ]; then
+		msg_stopping Keepalived
+		killproc --pidfile /var/run/keepalived.pid keepalived
+		rm -f /var/lock/subsys/keepalived /var/run/keepalived.pid >/dev/null 2>&1
+	else
+		msg_not_running Keepalived
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  reload)
+	if [ -f /var/lock/subsys/keepalived ]; then
+		msg_reloading Keepalived
+		killproc --pidfile /var/run/keepalived.pid keepalived -HUP
+		RETVAL=$?
+	else
+		msg_not_running Keepalived
+		exit 7
+	fi
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|reload}"
+	exit 3
+	;;
+esac
+
+exit $RETVAL

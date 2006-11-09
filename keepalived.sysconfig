@@ -1,0 +1,7 @@
+# Customized settings for Keepalived
+
+# Define nice level for keepalived
+SERVICE_RUN_NICE_LEVEL="+10"
+
+# Cmdline options
+KEEPALIVED_OPTS=""
