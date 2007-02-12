@@ -6,7 +6,7 @@
 #	- remove a default example/working config 
 #
 Summary:	HA monitor built upon LVS, VRRP and services poller
-Summary(pl):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzêdzie do sprawdzania us³ug
+Summary(pl.UTF-8):   Monitor HA zbudowany w oparciu o LVS, VRRP i narzÄ™dzie do sprawdzania usÅ‚ug
 Name:		keepalived
 Version:	1.1.13
 Release:	0.1
@@ -38,20 +38,20 @@ keepalived implements a VRRPv2 stack to handle director failover. So
 in short keepalived is a userspace daemon for LVS cluster nodes
 healthchecks and LVS directors failover.
 
-%description -l pl
-G³ównym celem projektu keepalived jest dodanie potê¿nego udogodnienia
+%description -l pl.UTF-8
+GÅ‚Ã³wnym celem projektu keepalived jest dodanie potÄ™Å¼nego udogodnienia
 keepalive do projektu Linux Virtual Server. Ten projekt jest napisany
 w C z wielowarstwowym sprawdzaniem stosu TCP/IP. keepalived
 implementuje szkielet oparty na sprawdzaniu trzech rodzin: warstwy 3,
-warstwy 4 i warstwy 5. Ten szkielet daje demonowi mo¿liwo¶æ
-sprawdzania stanów puli serwerów LVS. Kiedy jeden serwer z puli
-serwerów LVS przestaje dzia³aæ, keepalived informuje o tym j±dro
-Linuksa poprzez wywo³anie setsockopt w celu usuniêcia wpisu o serwerze
+warstwy 4 i warstwy 5. Ten szkielet daje demonowi moÅ¼liwoÅ›Ä‡
+sprawdzania stanÃ³w puli serwerÃ³w LVS. Kiedy jeden serwer z puli
+serwerÃ³w LVS przestaje dziaÅ‚aÄ‡, keepalived informuje o tym jÄ…dro
+Linuksa poprzez wywoÅ‚anie setsockopt w celu usuniÄ™cia wpisu o serwerze
 z topologii LVS. Poza tym keepalived implementuje stos VRRPv2 do
-obs³ugi przejmowania zadañ (failover) samego urz±dzenia zarz±dzaj±cego
-(director). Czyli w skrócie keepalived to dzia³aj±cy w przestrzeni
-u¿ytkownika demon do sprawdzania stanu wêz³ów klastra LVS oraz
-przejmowania zadañ urz±dzenia zarz±dzaj±cego.
+obsÅ‚ugi przejmowania zadaÅ„ (failover) samego urzÄ…dzenia zarzÄ…dzajÄ…cego
+(director). Czyli w skrÃ³cie keepalived to dziaÅ‚ajÄ…cy w przestrzeni
+uÅ¼ytkownika demon do sprawdzania stanu wÄ™zÅ‚Ã³w klastra LVS oraz
+przejmowania zadaÅ„ urzÄ…dzenia zarzÄ…dzajÄ…cego.
 
 %prep
 %setup -q
