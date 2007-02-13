@@ -6,7 +6,7 @@
 #	- remove a default example/working config 
 #
 Summary:	HA monitor built upon LVS, VRRP and services poller
-Summary(pl.UTF-8):   Monitor HA zbudowany w oparciu o LVS, VRRP i narzędzie do sprawdzania usług
+Summary(pl.UTF-8):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzędzie do sprawdzania usług
 Name:		keepalived
 Version:	1.1.13
 Release:	0.1
