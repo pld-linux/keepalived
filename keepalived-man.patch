@@ -1,0 +1,37 @@
+--- ./keepalived/Makefile.in.org	2006-10-11 11:46:32.000000000 +0200
++++ ./keepalived/Makefile.in	2007-04-17 12:47:02.000000000 +0200
+@@ -91,8 +91,8 @@
+ 	rm -f $(DESTDIR)$(sbindir)/$(EXEC)
+ 	rm -rf $(DESTDIR)$(sysconfdir)/keepalived
+ 	rm -f $(DESTDIR)$(init_dir)/$(init_script)
+-	rm -f $(DESTDIR)@mandir@/man/man5/keepalived.conf.5
+-	rm -f $(DESTDIR)@mandir@/man/man8/keepalived.8
++	rm -f $(DESTDIR)@mandir@/man5/keepalived.conf.5
++	rm -f $(DESTDIR)@mandir@/man8/keepalived.8
+ 
+ install:
+ 	install -d $(DESTDIR)$(sbindir)
+@@ -102,7 +102,7 @@
+ 	install -d $(DESTDIR)$(sysconfdir)/keepalived/samples
+ 	install -m 644 $(conf_file) $(DESTDIR)$(sysconfdir)/keepalived/
+ 	install -m 644 ../doc/samples/* $(DESTDIR)$(sysconfdir)/keepalived/samples/
+-	install -d $(DESTDIR)@mandir@/man/man5
+-	install -d $(DESTDIR)@mandir@/man/man8
+-	install -m 644 ../doc/man/man5/keepalived.conf.5 $(DESTDIR)@mandir@/man/man5
+-	install -m 644 ../doc/man/man8/keepalived.8 $(DESTDIR)@mandir@/man/man8
++	install -d $(DESTDIR)@mandir@/man5
++	install -d $(DESTDIR)@mandir@/man8
++	install -m 644 ../doc/man/man5/keepalived.conf.5 $(DESTDIR)@mandir@/man5
++	install -m 644 ../doc/man/man8/keepalived.8 $(DESTDIR)@mandir@/man8
+--- ./genhash/Makefile.in.org	2006-10-11 11:46:49.000000000 +0200
++++ ./genhash/Makefile.in	2007-04-17 12:49:24.000000000 +0200
+@@ -45,7 +45,7 @@
+ 	install -d $(DESTDIR)$(bindir)
+ 	install -m 755 $(BIN)/$(EXEC) $(DESTDIR)$(bindir)/
+-	install -d $(DESTDIR)@mandir@/man/man1
++	install -d $(DESTDIR)@mandir@/man1
+-	install -m 644 ../doc/man/man1/genhash.1 $(DESTDIR)@mandir@/man/man1
++	install -m 644 ../doc/man/man1/genhash.1 $(DESTDIR)@mandir@/man1
+ 
+ mrproper: clean distclean
+ 	rm -f config.*
