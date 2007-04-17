@@ -1,23 +1,25 @@
 #
-# TODO: - why it uses 2.6.x kernel header directly instead of llh?
-#         and more - it looks for /usr/src/linux/net/core/link_watch.c 
-#	  (kernel-source) for LVS features - check build/kernel 
-#	  dependency.
-#	- remove a default example/working config 
+# TODO:
+# - why it uses 2.6.x kernel header directly instead of llh?
+#   and more - it looks for /usr/src/linux/net/core/link_watch.c 
+#   (kernel-source) for LVS features - check build/kernel dependency.
+# - remove a default example/working config
+# - genhash to separate package
 #
 Summary:	HA monitor built upon LVS, VRRP and services poller
 Summary(pl.UTF-8):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzędzie do sprawdzania usług
 Name:		keepalived
 Version:	1.1.13
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://www.keepalived.org/software/%{name}-%{version}.tar.gz
 # Source0-md5:	578bdb8e3ff4cca50fc877893bad658c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Patch0:		%{name}-man.patch
 URL:		http://www.keepalived.org/
-BuildRequires:	kernel-source >= 2.6.0
+#BuildRequires:	kernel-source >= 2.6.0
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	popt-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -55,28 +57,28 @@ przejmowania zadań urządzenia zarządzającego.
 
 %prep
 %setup -q
-sed -i 's/_KRNL_2_2_/_KRNL_2_6_/' configure
+%patch0 -p1
+# What for?
+#sed -i 's/_KRNL_2_2_/_KRNL_2_6_/' configure
 
 %build
 %configure \
-	CFLAGS="-D__KERNGLUE__ -I%{_kernelsrcdir}/include \
-	-include %{_kernelsrcdir}/include/asm-generic/errno.h"
+	CFLAGS="%{rpmcflags} -include %{_includedir}/linux/errno.h"
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig}
 
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/keepalived
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}}
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
-install keepalived/etc/keepalived/keepalived.conf $RPM_BUILD_ROOT%{_sysconfdir}/keepalived
-install bin/genhash $RPM_BUILD_ROOT%{_bindir}
-install bin/keepalived $RPM_BUILD_ROOT%{_sbindir}
-install doc/man/man1/* $RPM_BUILD_ROOT%{_mandir}/man1
-install doc/man/man5/* $RPM_BUILD_ROOT%{_mandir}/man5
-install doc/man/man8/* $RPM_BUILD_ROOT%{_mandir}/man8
-install -D %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/keepalived
-install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/keepalived
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+
+# Cleanups:
+rm -rf $RPM_BUILD_ROOT/etc/keepalived/samples
+rm -f $RPM_BUILD_ROOT/etc/init.d/keepalived
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -93,12 +95,13 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/samples doc/keepalived*
-%doc AUTHOR ChangeLog CONTRIBUTORS README TODO
+%doc AUTHOR ChangeLog CONTRIBUTORS README TODO doc/samples doc/keepalived*
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keepalived/keepalived.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(755,root,root) %{_bindir}/genhash
 %attr(755,root,root) %{_sbindir}/keepalived
-%attr(754,root,root) /etc/rc.d/init.d/keepalived
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_sysconfdir}/keepalived
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keepalived/keepalived.conf
-%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/keepalived
-%{_mandir}/man?/*
+%{_mandir}/man1/*.1*
+%{_mandir}/man5/*.5*
+%{_mandir}/man8/*.8*
