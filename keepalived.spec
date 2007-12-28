@@ -3,21 +3,21 @@
 # - why it uses 2.6.x kernel header directly instead of llh?
 #   and more - it looks for /usr/src/linux/net/core/link_watch.c 
 #   (kernel-source) for LVS features - check build/kernel dependency.
+#   [-D_WITH_LINKWATCH_ allows force this feature without file existence]
 # - remove a default example/working config
 # - genhash to separate package
 #
 Summary:	HA monitor built upon LVS, VRRP and services poller
 Summary(pl.UTF-8):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzędzie do sprawdzania usług
 Name:		keepalived
-Version:	1.1.13
+Version:	1.1.15
 Release:	0.2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://www.keepalived.org/software/%{name}-%{version}.tar.gz
-# Source0-md5:	578bdb8e3ff4cca50fc877893bad658c
+# Source0-md5:	4c93f5d8b6bfabe84b02828a5bbb7aa0
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Patch0:		%{name}-man.patch
 URL:		http://www.keepalived.org/
 #BuildRequires:	kernel-source >= 2.6.0
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -57,13 +57,10 @@ przejmowania zadań urządzenia zarządzającego.
 
 %prep
 %setup -q
-%patch0 -p1
-# What for?
-#sed -i 's/_KRNL_2_2_/_KRNL_2_6_/' configure
 
 %build
 %configure \
-	CFLAGS="%{rpmcflags} -include %{_includedir}/linux/errno.h"
+	CFLAGS="%{rpmcflags} -include %{_includedir}/linux/errno.h -D_WITH_LINKWATCH_"
 %{__make}
 
 %install
