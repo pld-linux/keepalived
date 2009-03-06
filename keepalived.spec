@@ -10,12 +10,12 @@
 Summary:	HA monitor built upon LVS, VRRP and services poller
 Summary(pl.UTF-8):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzędzie do sprawdzania usług
 Name:		keepalived
-Version:	1.1.16
+Version:	1.1.17
 Release:	0.1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://www.keepalived.org/software/%{name}-%{version}.tar.gz
-# Source0-md5:	24ee4cd71d02845f95afd237028c552f
+# Source0-md5:	324ef61a9eed389679f0a05edd1d1323
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 URL:		http://www.keepalived.org/
