@@ -1,12 +1,12 @@
 #
 # TODO:
-# - genhash to separate package
+# - test
 #
 Summary:	HA monitor built upon LVS, VRRP and services poller
 Summary(pl.UTF-8):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzędzie do sprawdzania usług
 Name:		keepalived
 Version:	1.1.19
-Release:	0.3
+Release:	0.4
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://www.keepalived.org/software/%{name}-%{version}.tar.gz
@@ -22,6 +22,7 @@ BuildRequires:	popt-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
+Suggests:	genhash
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -51,6 +52,18 @@ obsługi przejmowania zadań (failover) samego urządzenia zarządzającego
 (director). Czyli w skrócie keepalived to działający w przestrzeni
 użytkownika demon do sprawdzania stanu węzłów klastra LVS oraz
 przejmowania zadań urządzenia zarządzającego.
+
+%package genhash
+Summary:	genhash - md5 hash generation tool for remote web pages
+Group:		Applications/System
+Provides:	genhash
+
+%description genhash
+genhash is a tool used for generating md5sum hashes of remote web 
+pages.  genhash can use HTTP or HTTPS to connect to the web page.  
+The output by this utility includes the HTTP header, page data, 
+and the md5sum of the data. This md5sum can then be used within 
+the keepalived program, for monitoring HTTP and HTTPS services.
 
 %prep
 %setup -q
@@ -94,10 +107,13 @@ fi
 %doc AUTHOR ChangeLog CONTRIBUTORS README TODO doc/samples doc/keepalived*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keepalived/keepalived.conf
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
-%attr(755,root,root) %{_bindir}/genhash
 %attr(755,root,root) %{_sbindir}/keepalived
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %dir %{_sysconfdir}/keepalived
-%{_mandir}/man1/*.1*
-%{_mandir}/man5/*.5*
-%{_mandir}/man8/*.8*
+%{_mandir}/man5/keepalived.conf.5*
+%{_mandir}/man8/keepalived.8*
+
+%files genhash
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/genhash
+%{_mandir}/man1/genhash.1*
