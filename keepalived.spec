@@ -15,6 +15,8 @@ Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-use-linux-libc-headers.patch
 URL:		http://www.keepalived.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 #BuildRequires:	kernel-source >= 2.6.0
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	popt-devel
@@ -32,10 +34,10 @@ implements a framework based on three family checks: Layer3, Layer4 &
 Layer5. This framework gives the daemon the ability of checking a LVS
 server pool states. When one of the server of the LVS server pool is
 down, keepalived informs the Linux kernel via a setsockopt call to
-remove this server entry from the LVS topology. In addition
-keepalived implements a VRRPv2 stack to handle director failover. So
-in short keepalived is a userspace daemon for LVS cluster nodes
-healthchecks and LVS directors failover.
+remove this server entry from the LVS topology. In addition keepalived
+implements a VRRPv2 stack to handle director failover. So in short
+keepalived is a userspace daemon for LVS cluster nodes healthchecks
+and LVS directors failover.
 
 %description -l pl.UTF-8
 Głównym celem projektu keepalived jest dodanie potężnego udogodnienia
@@ -58,11 +60,11 @@ Group:		Applications/System
 Provides:	genhash
 
 %description genhash
-genhash is a tool used for generating md5sum hashes of remote web 
-pages.  genhash can use HTTP or HTTPS to connect to the web page.  
-The output by this utility includes the HTTP header, page data, 
-and the md5sum of the data. This md5sum can then be used within 
-the keepalived program, for monitoring HTTP and HTTPS services.
+genhash is a tool used for generating md5sum hashes of remote web
+pages. genhash can use HTTP or HTTPS to connect to the web page. The
+output by this utility includes the HTTP header, page data, and the
+md5sum of the data. This md5sum can then be used within the keepalived
+program, for monitoring HTTP and HTTPS services.
 
 %prep
 %setup -q
