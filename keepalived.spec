@@ -1,12 +1,14 @@
+# TODO: Check if --with-kernel-dir=/usr/src/linux/include/  fix is OK
+# ( https://dev.openwrt.org/ticket/12875 )
 Summary:	HA monitor built upon LVS, VRRP and services poller
 Summary(pl.UTF-8):	Monitor HA zbudowany w oparciu o LVS, VRRP i narzędzie do sprawdzania usług
 Name:		keepalived
-Version:	1.2.2
+Version:	1.2.15
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://www.keepalived.org/software/%{name}-%{version}.tar.gz
-# Source0-md5:	f68327ca142616a8463d2d105db122cd
+# Source0-md5:	d85fcb8e564ea03b0ca7b2357bf30c51
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-config.patch
@@ -70,7 +72,9 @@ program, for monitoring HTTP and HTTPS services.
 %{__aclocal}
 %{__autoconf}
 %configure \
-	CFLAGS="%{rpmcflags} -include %{_includedir}/linux/errno.h -D_WITH_LINKWATCH_"
+      --with-kernel-dir=/usr/src/linux/include/ \
+      CFLAGS="%{rpmcflags}  -D_WITH_LINKWATCH_"
+#	CFLAGS="%{rpmcflags} -include %{_includedir}/linux/errno.h -D_WITH_LINKWATCH_"
 %{__make}
 
 %install
